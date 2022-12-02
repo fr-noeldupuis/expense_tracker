@@ -42,4 +42,21 @@ void main() {
     expect(transaction.date, equals(transactionCreation));
     expect(transaction.category, equals("Test Category"));
   });
+
+  test('Constructor: Category is mandatory for EXPENSE and REVENUE Types',
+      () async {
+    DateTime transactionCreation = DateTime.now();
+    expect(
+        () => Transaction(
+            date: transactionCreation,
+            type: TransactionType.EXPENSE,
+            amount: 3.14),
+        throwsA(isA<MandatoryCategoryException>()));
+    expect(
+        () => Transaction(
+            date: transactionCreation,
+            type: TransactionType.REVENUE,
+            amount: 3.14),
+        throwsA(isA<MandatoryCategoryException>()));
+  });
 }

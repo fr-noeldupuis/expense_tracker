@@ -11,7 +11,13 @@ class Transaction {
       required this.amount,
       required this.type,
       this.category = "",
-      this.comment = ""});
+      this.comment = ""}) {
+    if (type == TransactionType.EXPENSE || type == TransactionType.REVENUE) {
+      throw MandatoryCategoryException();
+    }
+  }
 }
 
-enum TransactionType { EXPENSE }
+enum TransactionType { EXPENSE, REVENUE, TRANSFER }
+
+class MandatoryCategoryException implements Exception {}
