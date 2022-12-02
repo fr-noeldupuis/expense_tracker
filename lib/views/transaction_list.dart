@@ -16,10 +16,12 @@ class _TransactionListViewState extends State<TransactionListView> {
   void _createTransaction() {
     setState(() {
       _transactionList.add(Transaction(
-          date: DateTime.now(),
-          amount: 3.14,
-          type: TransactionType.EXPENSE,
-          category: "This is a category"));
+        date: DateTime.now(),
+        amount: 3.14,
+        type: TransactionType.EXPENSE,
+        category: "This is a category",
+        comment: "This is a comment",
+      ));
     });
   }
 
@@ -29,25 +31,39 @@ class _TransactionListViewState extends State<TransactionListView> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              _transactionList.length.toString(),
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: ListView.builder(
+        itemCount: _transactionList.length,
+        itemBuilder: (context, index) =>
+            TransactionCard(transaction: _transactionList[index]),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _createTransaction,
-        tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class TransactionCard extends StatelessWidget {
+  final Transaction transaction;
+  const TransactionCard({Key? key, required this.transaction})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(transaction.comment),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              transaction.amount.toString(),
+            ),
+          ],
+        )
+      ],
     );
   }
 }
