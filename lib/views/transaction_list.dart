@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:expense_tracker/model/category.dart';
 import 'package:expense_tracker/model/transaction.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +22,11 @@ class _TransactionListViewState extends State<TransactionListView> {
         date: DateTime.now(),
         amount: 3.14,
         type: TransactionType.EXPENSE,
-        category: "This is a category",
+        category: Category(
+          name: "Category Standard",
+          icon: Icon(Icons.account_balance),
+          color: Colors.blue,
+        ),
         comment: "This is a comment",
       ));
     });
@@ -51,19 +58,58 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(transaction.comment),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              transaction.amount.toString(),
+    return Container(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    color: transaction.category?.color,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Center(child: transaction.category?.icon)),
+              Text(
+                transaction.comment,
+                style: TextStyle(
+                  fontSize: 10,
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  transaction.amount.toString() + " €",
+                  style: TextStyle(
+                      color: _transactionColorSelection(transaction),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
             ),
-          ],
-        )
-      ],
+          )
+        ],
+      ),
     );
+  }
+
+  Color _transactionColorSelection(Transaction transaction) {
+    switch (transaction.type) {
+      case TransactionType.EXPENSE:
+        return Colors.red;
+      case TransactionType.REVENUE:
+        return Colors.green;
+      case TransactionType.TRANSFER:
+        return Colors.grey;
+    }
   }
 }
