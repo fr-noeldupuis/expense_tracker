@@ -58,5 +58,19 @@ void main() {
             type: TransactionType.REVENUE,
             amount: 3.14),
         throwsA(isA<MandatoryCategoryException>()));
+    expect(
+        () => Transaction(
+            date: transactionCreation,
+            type: TransactionType.EXPENSE,
+            category: "This is a category",
+            amount: 3.14),
+        returnsNormally);
+    expect(
+        () => Transaction(
+            date: transactionCreation,
+            type: TransactionType.REVENUE,
+            category: "This is a category",
+            amount: 3.14),
+        returnsNormally);
   });
 }

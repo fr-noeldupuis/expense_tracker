@@ -12,7 +12,8 @@ class Transaction {
       required this.type,
       this.category = "",
       this.comment = ""}) {
-    if (type == TransactionType.EXPENSE || type == TransactionType.REVENUE) {
+    if (category == "" &&
+        (type == TransactionType.EXPENSE || type == TransactionType.REVENUE)) {
       throw MandatoryCategoryException();
     }
   }
