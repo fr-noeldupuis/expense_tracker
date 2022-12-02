@@ -11,9 +11,7 @@ class Transaction {
       required this.amount,
       required this.type,
       this.category = "",
-      this.comment = ""}) {
-    throw UnimplementedError();
-  }
+      this.comment = ""});
 }
 
 enum TransactionType { EXPENSE }
