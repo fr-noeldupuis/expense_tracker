@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:expense_tracker/const.dart';
 import 'package:expense_tracker/model/category.dart';
 import 'package:expense_tracker/model/transaction.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +23,50 @@ class _TransactionListViewState extends State<TransactionListView> {
         date: DateTime.now(),
         amount: 3.14,
         type: TransactionType.EXPENSE,
-        category: Category(
-          name: "Category Standard",
-          icon: Icon(Icons.account_balance),
-          color: Colors.blue,
-        ),
+        category: initialCategories[0],
         comment: "This is a comment",
       ));
     });
+  }
+
+  Widget _buildCategorySelectionDialog(BuildContext context) {
+    return AlertDialog(
+        title: const Text('Select Category'),
+        content: SizedBox(
+          width: 400,
+          height: 300,
+          child: GridView.count(
+            childAspectRatio: 2 / 3,
+            crossAxisCount: 4,
+            children: initialCategories
+                .map(
+                  (e) => GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          margin: const EdgeInsets.only(bottom: 8.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: e.color,
+                          ),
+                          child: Icon(e.icon),
+                        ),
+                        Text(
+                          e.name,
+                          style: const TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        ));
   }
 
   @override
@@ -44,7 +81,21 @@ class _TransactionListViewState extends State<TransactionListView> {
             TransactionCard(transaction: _transactionList[index]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _createTransaction,
+        onPressed: () => {
+          showGeneralDialog(
+            context: context,
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                Container(),
+            transitionBuilder: (context, animation, secondaryAnimation, child) {
+              var curve = Curves.easeOutExpo.transform(animation.value);
+              return Transform.scale(
+                scale: curve,
+                child: _buildCategorySelectionDialog(context),
+              );
+            },
+            transitionDuration: const Duration(milliseconds: 100),
+          )
+        },
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
@@ -73,10 +124,10 @@ class TransactionCard extends StatelessWidget {
                     color: transaction.category?.color,
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  child: Center(child: transaction.category?.icon)),
+                  child: Center(child: Icon(transaction.category?.icon))),
               Text(
                 transaction.comment,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 10,
                 ),
               ),
@@ -88,7 +139,7 @@ class TransactionCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  transaction.amount.toString() + " €",
+                  "${transaction.amount} €",
                   style: TextStyle(
                       color: _transactionColorSelection(transaction),
                       fontSize: 18,
