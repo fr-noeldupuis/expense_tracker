@@ -122,7 +122,9 @@ class _TransactionListViewState extends State<TransactionListView> {
                     category: _selectedCategory!,
                     onConfirm: (transaction) {
                       setState(() {
-                        _transactionList.add(transaction);
+                        if (transaction != null) {
+                          _transactionList.add(transaction);
+                        }
                         _selectedCategory = null;
                         _floatingActionButtonVisible = true;
                       });
@@ -165,7 +167,7 @@ class TransactionCreate extends StatefulWidget {
   });
 
   final Category category;
-  final void Function(Transaction) onConfirm;
+  final void Function(Transaction?) onConfirm;
 
   @override
   State<TransactionCreate> createState() => _TransactionCreateState();
@@ -382,12 +384,16 @@ class _TransactionCreateState extends State<TransactionCreate> {
                     Button(
                       color: Theme.of(context).primaryColor,
                       onTap: () {
-                        Transaction transaction = Transaction(
-                            date: DateTime.now(),
-                            amount: _parseAmount(),
-                            type: TransactionType.EXPENSE,
-                            category: widget.category,
-                            comment: "Comment");
+                        double transactionAmount = _parseAmount();
+                        Transaction? transaction;
+                        if (transactionAmount != 0) {
+                          transaction = Transaction(
+                              date: DateTime.now(),
+                              amount: _parseAmount(),
+                              type: TransactionType.EXPENSE,
+                              category: widget.category,
+                              comment: "Comment");
+                        }
                         widget.onConfirm(transaction);
                       },
                       child: const Text(
