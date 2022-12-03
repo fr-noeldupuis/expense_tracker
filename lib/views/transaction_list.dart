@@ -4,7 +4,6 @@ import 'package:expense_tracker/model/category.dart';
 import 'package:expense_tracker/model/transaction.dart';
 import 'package:expense_tracker/views/transaction_create.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TransactionListView extends StatefulWidget {
   const TransactionListView(
