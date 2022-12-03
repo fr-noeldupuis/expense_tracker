@@ -176,6 +176,7 @@ class TransactionCreate extends StatefulWidget {
 class _TransactionCreateState extends State<TransactionCreate> {
   String _amount = "0";
   String _comment = "Comment";
+  bool _isTextEditing = false;
 
   void _addToAmount(String btnValue) {
     setState(() {
@@ -211,6 +212,23 @@ class _TransactionCreateState extends State<TransactionCreate> {
     return double.parse(_amount);
   }
 
+  late FocusNode myFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+
+    myFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    myFocusNode.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -237,7 +255,24 @@ class _TransactionCreateState extends State<TransactionCreate> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(_comment),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          TextField(
+                            enabled: true,
+                            showCursor: true,
+                            textAlign: TextAlign.center,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Comment',
+                            ),
+                            onChanged: (value) {
+                              _comment = value;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 Row(
@@ -395,7 +430,7 @@ class _TransactionCreateState extends State<TransactionCreate> {
                               amount: _parseAmount(),
                               type: TransactionType.EXPENSE,
                               category: widget.category,
-                              comment: "Comment");
+                              comment: _comment);
                         }
                         widget.onConfirm(transaction);
                       },
