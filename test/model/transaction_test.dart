@@ -12,7 +12,7 @@ void main() {
       amount: 3.14,
       category: Category(
         name: "Category Standard",
-        icon: Icon(Icons.account_balance),
+        icon: Icons.account_balance,
         color: Colors.blue,
       ),
     );
@@ -22,7 +22,7 @@ void main() {
     DateTime transactionCreation = DateTime.now();
     Category category = Category(
       name: "Category Standard",
-      icon: Icon(Icons.account_balance),
+      icon: Icons.account_balance,
       color: Colors.blue,
     );
 
@@ -33,7 +33,7 @@ void main() {
       amount: 3.14,
       category: Category(
         name: "Category Standard",
-        icon: Icon(Icons.account_balance),
+        icon: Icons.account_balance,
         color: Colors.blue,
       ),
     );
@@ -49,7 +49,7 @@ void main() {
     DateTime transactionCreation = DateTime.now();
     Category category = Category(
       name: "Category Standard",
-      icon: Icon(Icons.account_balance),
+      icon: Icons.account_balance,
       color: Colors.blue,
     );
 
@@ -71,7 +71,7 @@ void main() {
     DateTime transactionCreation = DateTime.now();
     Category category = Category(
       name: "Category Standard",
-      icon: Icon(Icons.account_balance),
+      icon: Icons.account_balance,
       color: Colors.blue,
     );
     expect(
