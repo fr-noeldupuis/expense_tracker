@@ -18,6 +18,7 @@ class _TransactionListViewState extends State<TransactionListView> {
   final List<Transaction> _transactionList = [];
 
   Category? _selectedCategory;
+  bool _floatingActionButtonVisible = true;
 
   void _createTransaction() {
     setState(() {
@@ -47,6 +48,7 @@ class _TransactionListViewState extends State<TransactionListView> {
                       Navigator.pop(context);
                       setState(() {
                         _selectedCategory = e;
+                        _floatingActionButtonVisible = false;
                       });
                     },
                     child: Column(
@@ -96,6 +98,7 @@ class _TransactionListViewState extends State<TransactionListView> {
                   onTap: () {
                     setState(() {
                       _selectedCategory = null;
+                      _floatingActionButtonVisible = true;
                     });
                   },
                   child: Container(
@@ -129,23 +132,27 @@ class _TransactionListViewState extends State<TransactionListView> {
             ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          showGeneralDialog(
-            context: context,
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                Container(),
-            transitionBuilder: (context, animation, secondaryAnimation, child) {
-              var curve = Curves.easeOutExpo.transform(animation.value);
-              return Transform.scale(
-                scale: curve,
-                child: _buildCategorySelectionDialog(context),
-              );
-            },
-            transitionDuration: const Duration(milliseconds: 100),
-          )
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Visibility(
+        visible: _floatingActionButtonVisible,
+        child: FloatingActionButton(
+          onPressed: () => {
+            showGeneralDialog(
+              context: context,
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  Container(),
+              transitionBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                var curve = Curves.easeOutExpo.transform(animation.value);
+                return Transform.scale(
+                  scale: curve,
+                  child: _buildCategorySelectionDialog(context),
+                );
+              },
+              transitionDuration: const Duration(milliseconds: 100),
+            )
+          },
+          child: const Icon(Icons.add),
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
