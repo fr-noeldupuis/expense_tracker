@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TransactionCreate extends StatefulWidget {
-  TransactionCreate({
-    Key? key,
+  const TransactionCreate({
+    super.key,
     required this.category,
     required this.onConfirm,
   });
@@ -20,7 +20,6 @@ class TransactionCreate extends StatefulWidget {
 class _TransactionCreateState extends State<TransactionCreate> {
   String _amount = "0";
   String _comment = "Comment";
-  bool _isTextEditing = false;
 
   void _addToAmount(String btnValue) {
     setState(() {
@@ -82,213 +81,211 @@ class _TransactionCreateState extends State<TransactionCreate> {
       child: Container(
         color: Theme.of(context).scaffoldBackgroundColor,
         child: SafeArea(
-          child: Container(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      _amount + " €",
-                      style: const TextStyle(
-                        fontSize: 28,
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          TextField(
-                            enabled: true,
-                            showCursor: true,
-                            textAlign: TextAlign.center,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Comment',
-                            ),
-                            onChanged: (value) {
-                              _comment = value;
-                            },
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "$_amount €",
+                    style: const TextStyle(
+                      fontSize: 28,
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        TextField(
+                          enabled: true,
+                          showCursor: true,
+                          textAlign: TextAlign.center,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Comment',
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Button(
-                      child: const Text(
-                        "7",
-                        style: TextStyle(
-                          fontSize: 18,
+                          onChanged: (value) {
+                            _comment = value;
+                          },
                         ),
-                      ),
-                      onTap: () => _addToAmount("7"),
+                      ],
                     ),
-                    Button(
-                      child: const Text(
-                        "8",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("8"),
-                    ),
-                    Button(
-                      child: const Text(
-                        "9",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("9"),
-                    ),
-                    Button(
-                      child: const Text(
-                        "+",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("+"),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Button(
-                      child: const Text(
-                        "4",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("4"),
-                    ),
-                    Button(
-                      child: const Text(
-                        "5",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("5"),
-                    ),
-                    Button(
-                      child: const Text(
-                        "6",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("6"),
-                    ),
-                    Button(
-                      child: const Text(
-                        "-",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("-"),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Button(
-                      child: const Text(
-                        "1",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("1"),
-                    ),
-                    Button(
-                      child: const Text(
-                        "2",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("2"),
-                    ),
-                    Button(
-                      child: const Text(
-                        "3",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("3"),
-                    ),
-                    Button(
-                      child: const Text(
-                        "*",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("*"),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Button(
-                      child: const Text(
-                        ".",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("."),
-                    ),
-                    Button(
-                      child: const Text(
-                        "0",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      onTap: () => _addToAmount("0"),
-                    ),
-                    Button(
-                      child: const Icon(FontAwesomeIcons.deleteLeft),
-                      onTap: _removeLast,
-                    ),
-                    Button(
-                      color: Theme.of(context).primaryColor,
-                      onTap: () {
-                        double transactionAmount = _parseAmount();
-                        Transaction? transaction;
-                        if (transactionAmount != 0) {
-                          transaction = Transaction(
-                              date: DateTime.now(),
-                              amount: _parseAmount(),
-                              type: TransactionType.EXPENSE,
-                              category: widget.category,
-                              comment: _comment);
-                        }
-                        widget.onConfirm(transaction);
-                      },
-                      child: const Text(
-                        "✓",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Button(
+                    child: const Text(
+                      "7",
+                      style: TextStyle(
+                        fontSize: 18,
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                    onTap: () => _addToAmount("7"),
+                  ),
+                  Button(
+                    child: const Text(
+                      "8",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("8"),
+                  ),
+                  Button(
+                    child: const Text(
+                      "9",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("9"),
+                  ),
+                  Button(
+                    child: const Text(
+                      "+",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("+"),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Button(
+                    child: const Text(
+                      "4",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("4"),
+                  ),
+                  Button(
+                    child: const Text(
+                      "5",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("5"),
+                  ),
+                  Button(
+                    child: const Text(
+                      "6",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("6"),
+                  ),
+                  Button(
+                    child: const Text(
+                      "-",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("-"),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Button(
+                    child: const Text(
+                      "1",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("1"),
+                  ),
+                  Button(
+                    child: const Text(
+                      "2",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("2"),
+                  ),
+                  Button(
+                    child: const Text(
+                      "3",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("3"),
+                  ),
+                  Button(
+                    child: const Text(
+                      "*",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("*"),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Button(
+                    child: const Text(
+                      ".",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("."),
+                  ),
+                  Button(
+                    child: const Text(
+                      "0",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () => _addToAmount("0"),
+                  ),
+                  Button(
+                    onTap: _removeLast,
+                    child: const Icon(FontAwesomeIcons.deleteLeft),
+                  ),
+                  Button(
+                    color: Theme.of(context).primaryColor,
+                    onTap: () {
+                      double transactionAmount = _parseAmount();
+                      Transaction? transaction;
+                      if (transactionAmount != 0) {
+                        transaction = Transaction(
+                            date: DateTime.now(),
+                            amount: _parseAmount(),
+                            type: TransactionType.EXPENSE,
+                            category: widget.category,
+                            comment: _comment);
+                      }
+                      widget.onConfirm(transaction);
+                    },
+                    child: const Text(
+                      "✓",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -297,7 +294,7 @@ class _TransactionCreateState extends State<TransactionCreate> {
 }
 
 class Button extends StatelessWidget {
-  Button({
+  const Button({
     Key? key,
     required this.child,
     this.color,

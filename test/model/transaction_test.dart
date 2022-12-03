@@ -5,12 +5,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('Constructor creates a transaction', () async {
+    // ignore: unused_local_variable
     Transaction transaction = Transaction(
       date: DateTime.now(),
       type: TransactionType.EXPENSE,
       comment: "This is a comment",
       amount: 3.14,
-      category: Category(
+      category: const Category(
         name: "Category Standard",
         icon: Icons.account_balance,
         color: Colors.blue,
@@ -20,7 +21,7 @@ void main() {
 
   test('Constructor creates a transaction with provided data', () async {
     DateTime transactionCreation = DateTime.now();
-    Category category = Category(
+    Category category = const Category(
       name: "Category Standard",
       icon: Icons.account_balance,
       color: Colors.blue,
@@ -31,7 +32,7 @@ void main() {
       type: TransactionType.EXPENSE,
       comment: "This is a comment",
       amount: 3.14,
-      category: Category(
+      category: const Category(
         name: "Category Standard",
         icon: Icons.account_balance,
         color: Colors.blue,
@@ -47,7 +48,7 @@ void main() {
   test('Constructor: no comment should init the comment to empty string',
       () async {
     DateTime transactionCreation = DateTime.now();
-    Category category = Category(
+    Category category = const Category(
       name: "Category Standard",
       icon: Icons.account_balance,
       color: Colors.blue,
@@ -69,7 +70,7 @@ void main() {
   test('Constructor: Category is mandatory for EXPENSE and REVENUE Types',
       () async {
     DateTime transactionCreation = DateTime.now();
-    Category category = Category(
+    Category category = const Category(
       name: "Category Standard",
       icon: Icons.account_balance,
       color: Colors.blue,
