@@ -1,4 +1,5 @@
 import 'package:expense_tracker/const.dart';
+import 'package:expense_tracker/controllers/controller.dart';
 import 'package:expense_tracker/model/category.dart';
 import 'package:expense_tracker/model/transaction.dart';
 import 'package:expense_tracker/views/transaction_create.dart';
@@ -6,17 +7,17 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TransactionListView extends StatefulWidget {
-  const TransactionListView({super.key, required this.title});
+  const TransactionListView(
+      {super.key, required this.title, required this.transactionController});
 
   final String title;
+  final TransactionController transactionController;
 
   @override
   State<TransactionListView> createState() => _TransactionListViewState();
 }
 
 class _TransactionListViewState extends State<TransactionListView> {
-  final List<Transaction> _transactionList = [];
-
   Category? _selectedCategory;
   bool _floatingActionButtonVisible = true;
 
@@ -30,7 +31,7 @@ class _TransactionListViewState extends State<TransactionListView> {
   _confirmTransactionCallback(Transaction? transaction) {
     setState(() {
       if (transaction != null) {
-        _transactionList.add(transaction);
+        widget.transactionController.saveTransaction(transaction);
       }
       _selectedCategory = null;
       _floatingActionButtonVisible = true;
@@ -85,6 +86,8 @@ class _TransactionListViewState extends State<TransactionListView> {
 
   @override
   Widget build(BuildContext context) {
+    List<Transaction> transactionList =
+        widget.transactionController.getAllTransactions();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -92,9 +95,9 @@ class _TransactionListViewState extends State<TransactionListView> {
       body: Stack(
         children: [
           ListView.builder(
-            itemCount: _transactionList.length,
+            itemCount: transactionList.length,
             itemBuilder: (context, index) =>
-                TransactionListElement(transaction: _transactionList[index]),
+                TransactionListElement(transaction: transactionList[index]),
           ),
           if (_selectedCategory != null)
             TransactionCreatePage(

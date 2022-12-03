@@ -1,12 +1,18 @@
+import 'package:expense_tracker/controllers/controller.dart';
 import 'package:expense_tracker/views/transaction_list.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  TransactionController transactionController = TransactionController();
+  runApp(MyApp(
+    transactionController: transactionController,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.transactionController});
+
+  final TransactionController transactionController;
 
   // This widget is the root of your application.
   @override
@@ -26,7 +32,10 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.green,
       ),
-      home: const TransactionListView(title: 'Flutter Demo Home Page'),
+      home: TransactionListView(
+        title: 'Flutter Demo Home Page',
+        transactionController: transactionController,
+      ),
     );
   }
 }
