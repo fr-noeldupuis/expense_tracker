@@ -17,6 +17,8 @@ class TransactionListView extends StatefulWidget {
 class _TransactionListViewState extends State<TransactionListView> {
   final List<Transaction> _transactionList = [];
 
+  Category? _selectedCategory;
+
   void _createTransaction() {
     setState(() {
       _transactionList.add(Transaction(
@@ -41,7 +43,12 @@ class _TransactionListViewState extends State<TransactionListView> {
             children: initialCategories
                 .map(
                   (e) => GestureDetector(
-                    onTap: () => Navigator.pop(context),
+                    onTap: () {
+                      Navigator.pop(context);
+                      setState(() {
+                        _selectedCategory = e;
+                      });
+                    },
                     child: Column(
                       children: [
                         Container(
@@ -75,10 +82,52 @@ class _TransactionListViewState extends State<TransactionListView> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView.builder(
-        itemCount: _transactionList.length,
-        itemBuilder: (context, index) =>
-            TransactionCard(transaction: _transactionList[index]),
+      body: Stack(
+        children: [
+          ListView.builder(
+            itemCount: _transactionList.length,
+            itemBuilder: (context, index) =>
+                TransactionCard(transaction: _transactionList[index]),
+          ),
+          if (_selectedCategory != null)
+            Stack(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedCategory = null;
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(5.0),
+                    alignment: Alignment.bottomCenter,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: <Color>[
+                          Colors.black38,
+                          Colors.black45,
+                          Colors.black87
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    color: _selectedCategory!.color,
+                    child: SafeArea(
+                      child: Text(_selectedCategory!.name),
+                    ),
+                  ),
+                )
+              ],
+            ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {
