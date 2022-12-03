@@ -175,6 +175,25 @@ class TransactionCreate extends StatefulWidget {
 
 class _TransactionCreateState extends State<TransactionCreate> {
   String _amount = "0";
+  String _comment = "Comment";
+
+  TextEditingController? _noteController;
+
+  @override
+  void initState() {
+    super.initState();
+    _noteController = TextEditingController.fromValue(
+      TextEditingValue(
+        text: _comment,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _noteController!.dispose();
+    super.dispose();
+  }
 
   void _addToAmount(String btnValue) {
     setState(() {
@@ -235,7 +254,9 @@ class _TransactionCreateState extends State<TransactionCreate> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [const Text("Comment")],
+                  children: [
+                    Text("Comment"),
+                  ],
                 ),
                 Row(
                   children: [
