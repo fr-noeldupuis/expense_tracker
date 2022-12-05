@@ -4,6 +4,7 @@ import 'package:expense_tracker/model/category.dart';
 import 'package:expense_tracker/model/transaction.dart';
 import 'package:expense_tracker/views/transaction_create.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class TransactionListView extends StatefulWidget {
   const TransactionListView(
@@ -22,16 +23,6 @@ class _TransactionListViewState extends State<TransactionListView> {
 
   _leaveCreation() {
     setState(() {
-      _selectedCategory = null;
-      _floatingActionButtonVisible = true;
-    });
-  }
-
-  _confirmTransactionCallback(Transaction? transaction) {
-    setState(() {
-      if (transaction != null) {
-        widget.transactionController.saveTransaction(transaction);
-      }
       _selectedCategory = null;
       _floatingActionButtonVisible = true;
     });
@@ -66,7 +57,9 @@ class _TransactionListViewState extends State<TransactionListView> {
                             borderRadius: BorderRadius.circular(50),
                             color: e.color,
                           ),
-                          child: Icon(e.icon),
+                          child: Icon(IconData(e.iconCodePoint,
+                              fontFamily: e.iconFontFamily,
+                              fontPackage: e.iconFontPackage)),
                         ),
                         Text(
                           e.name,
@@ -85,18 +78,20 @@ class _TransactionListViewState extends State<TransactionListView> {
 
   @override
   Widget build(BuildContext context) {
-    List<Transaction> transactionList =
-        widget.transactionController.getAllTransactions();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Stack(
         children: [
-          ListView.builder(
-            itemCount: transactionList.length,
-            itemBuilder: (context, index) =>
-                TransactionListElement(transaction: transactionList[index]),
+          ValueListenableBuilder(
+            valueListenable: widget.transactionController.getListenable(),
+            builder: (context, box, child) => ListView.builder(
+              itemCount: box.values.length,
+              itemBuilder: (context, index) => TransactionListElement(
+                transaction: box.getAt(index)!,
+              ),
+            ),
           ),
           if (_selectedCategory != null)
             TransactionCreatePage(
@@ -129,6 +124,16 @@ class _TransactionListViewState extends State<TransactionListView> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+  _confirmTransactionCallback(Transaction? transaction) async {
+    if (transaction != null) {
+      await widget.transactionController.saveTransaction(transaction);
+    }
+    setState(() {
+      _selectedCategory = null;
+      _floatingActionButtonVisible = true;
+    });
+  }
 }
 
 class TransactionListElement extends StatelessWidget {
@@ -153,7 +158,11 @@ class TransactionListElement extends StatelessWidget {
                     color: transaction.category?.color,
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  child: Center(child: Icon(transaction.category?.icon))),
+                  child: Center(
+                      child: Icon(IconData(transaction.category!.iconCodePoint,
+                          fontFamily: transaction.category!.iconFontFamily,
+                          fontPackage:
+                              transaction.category!.iconFontPackage)))),
               Text(
                 transaction.comment,
                 style: const TextStyle(

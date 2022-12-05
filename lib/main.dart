@@ -1,8 +1,17 @@
 import 'package:expense_tracker/controllers/controller.dart';
+import 'package:expense_tracker/model/category.dart';
+import 'package:expense_tracker/model/transaction.dart';
 import 'package:expense_tracker/views/transaction_list.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(TransactionAdapter());
+  Hive.registerAdapter(TransactionTypeAdapter());
+  Hive.registerAdapter(CategoryAdapter());
+  Hive.registerAdapter(ColorAdapter());
+  var transactions = await Hive.openBox<Transaction>('transactions');
   TransactionController transactionController = TransactionController();
   runApp(MyApp(
     transactionController: transactionController,
