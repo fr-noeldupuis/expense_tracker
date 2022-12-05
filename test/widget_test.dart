@@ -5,6 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:expense_tracker/controllers/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,7 +15,10 @@ void main() {
   testWidgets('Creating a transaction should generate a Container',
       (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    TransactionController controller = TransactionController();
+    await tester.pumpWidget(MyApp(
+      transactionController: controller,
+    ));
 
     // Verify that our counter starts at 0.
     expect(find.text("This is a comment"), findsNothing);

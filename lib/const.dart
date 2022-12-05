@@ -2,30 +2,40 @@ import 'package:expense_tracker/model/category.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-const List<Category> initialCategories = [
+List<Category> initialCategories = [
   Category(
     name: "Banque",
-    icon: FontAwesomeIcons.buildingColumns,
     color: Colors.green,
+    iconCodePoint: FontAwesomeIcons.buildingColumns.codePoint,
+    iconFontFamily: FontAwesomeIcons.buildingColumns.fontFamily,
+    iconFontPackage: FontAwesomeIcons.buildingColumns.fontPackage,
   ),
   Category(
     name: "Maison",
-    icon: FontAwesomeIcons.house,
     color: Colors.blue,
+    iconCodePoint: FontAwesomeIcons.house.codePoint,
+    iconFontFamily: FontAwesomeIcons.house.fontFamily,
+    iconFontPackage: FontAwesomeIcons.house.fontPackage,
   ),
   Category(
     name: "Courses",
-    icon: FontAwesomeIcons.basketShopping,
     color: Colors.yellow,
+    iconCodePoint: FontAwesomeIcons.basketShopping.codePoint,
+    iconFontFamily: FontAwesomeIcons.basketShopping.fontFamily,
+    iconFontPackage: FontAwesomeIcons.basketShopping.fontPackage,
   ),
   Category(
     name: "Work",
-    icon: FontAwesomeIcons.briefcase,
     color: Colors.red,
+    iconCodePoint: FontAwesomeIcons.briefcase.codePoint,
+    iconFontFamily: FontAwesomeIcons.briefcase.fontFamily,
+    iconFontPackage: FontAwesomeIcons.briefcase.fontPackage,
   ),
   Category(
     name: "Autres",
-    icon: FontAwesomeIcons.bagShopping,
     color: Colors.red,
+    iconCodePoint: FontAwesomeIcons.bagShopping.codePoint,
+    iconFontFamily: FontAwesomeIcons.bagShopping.fontFamily,
+    iconFontPackage: FontAwesomeIcons.bagShopping.fontPackage,
   ),
 ];
