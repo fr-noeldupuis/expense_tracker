@@ -12,7 +12,7 @@ class TransactionController {
   }
 
   Future<void> saveTransaction(Transaction transaction) async {
-    await transactionBox.put(DateTime.now(), transaction);
+    await transactionBox.put(DateTime.now().toIso8601String(), transaction);
   }
 
   List<Transaction> getAllTransactions() {
