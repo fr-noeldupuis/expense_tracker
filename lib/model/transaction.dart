@@ -3,12 +3,12 @@
 import 'package:expense_tracker/model/category.dart';
 import 'package:hive/hive.dart';
 
-part '../adapters/transaction.g.dart';
+part 'transaction.g.dart';
 
 @HiveType(typeId: 0)
 class Transaction {
   @HiveField(0)
-  int id = 0;
+  int id;
   @HiveField(1)
   DateTime date;
   @HiveField(2)
@@ -18,15 +18,16 @@ class Transaction {
   @HiveField(4)
   String comment = "";
   @HiveField(5)
-  Category? category;
+  int? categoryId;
 
   Transaction(
-      {required this.date,
+      {required this.id,
+      required this.date,
       required this.amount,
       required this.type,
-      this.category,
+      this.categoryId,
       this.comment = ""}) {
-    if (category == null &&
+    if (categoryId == null &&
         (type == TransactionType.EXPENSE || type == TransactionType.REVENUE)) {
       throw MandatoryCategoryException();
     }

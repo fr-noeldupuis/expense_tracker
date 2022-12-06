@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-part '../adapters/category.g.dart';
+part 'category.g.dart';
 
 @HiveType(typeId: 3)
 class Category {
   @HiveField(0)
-  final String name;
+  final int id;
   @HiveField(1)
-  late int iconCodePoint;
+  final String name;
   @HiveField(2)
-  late String? iconFontFamily;
+  late int iconId;
   @HiveField(3)
-  late String? iconFontPackage;
-  @HiveField(4)
-  final Color color;
+  final int colorId;
 
   Category({
+    required this.id,
     required this.name,
-    required this.iconCodePoint,
-    required this.iconFontFamily,
-    required this.iconFontPackage,
-    required this.color,
+    required this.iconId,
+    required this.colorId,
   });
 }

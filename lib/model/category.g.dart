@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../model/category.dart';
+part of 'category.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -17,28 +17,25 @@ class CategoryAdapter extends TypeAdapter<Category> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Category(
-      name: fields[0] as String,
-      iconCodePoint: fields[1] as int,
-      iconFontFamily: fields[2] as String?,
-      iconFontPackage: fields[3] as String?,
-      color: fields[4] as Color,
+      id: fields[0] as int,
+      name: fields[1] as String,
+      iconId: fields[2] as int,
+      colorId: fields[3] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Category obj) {
     writer
-      ..writeByte(5)
-      ..writeByte(0)
-      ..write(obj.name)
-      ..writeByte(1)
-      ..write(obj.iconCodePoint)
-      ..writeByte(2)
-      ..write(obj.iconFontFamily)
-      ..writeByte(3)
-      ..write(obj.iconFontPackage)
       ..writeByte(4)
-      ..write(obj.color);
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.name)
+      ..writeByte(2)
+      ..write(obj.iconId)
+      ..writeByte(3)
+      ..write(obj.colorId);
   }
 
   @override
