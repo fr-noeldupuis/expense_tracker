@@ -7,11 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class TransactionListView extends StatefulWidget {
-  const TransactionListView(
-      {super.key, required this.title, required this.transactionController});
+  const TransactionListView({
+    super.key,
+    required this.title,
+    required this.transactionController,
+    required this.categoryController,
+  });
 
   final String title;
   final TransactionController transactionController;
+  final CategoryController categoryController;
 
   @override
   State<TransactionListView> createState() => _TransactionListViewState();
@@ -34,44 +39,45 @@ class _TransactionListViewState extends State<TransactionListView> {
         content: SizedBox(
           width: 400,
           height: 300,
-          child: GridView.count(
-            childAspectRatio: 2 / 3,
-            crossAxisCount: 4,
-            children: initialCategories
-                .map(
-                  (e) => GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      setState(() {
-                        _selectedCategory = e;
-                        _floatingActionButtonVisible = false;
-                      });
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          margin: const EdgeInsets.only(bottom: 8.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: e.color,
+          child: ValueListenableBuilder(
+            valueListenable: widget.categoryController.getListenable(),
+            builder: (context, box, child) => GridView.count(
+              childAspectRatio: 2 / 3,
+              crossAxisCount: 4,
+              children: box.values
+                  .map<Widget>(
+                    (e) => GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        setState(() {
+                          _selectedCategory = e;
+                          _floatingActionButtonVisible = false;
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            margin: const EdgeInsets.only(bottom: 8.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: colorsPack.elementAt(e.colorId),
+                            ),
+                            child: Icon(iconPack.elementAt(e.iconId)),
                           ),
-                          child: Icon(IconData(e.iconCodePoint,
-                              fontFamily: e.iconFontFamily,
-                              fontPackage: e.iconFontPackage)),
-                        ),
-                        Text(
-                          e.name,
-                          style: const TextStyle(
-                            fontSize: 10,
+                          Text(
+                            e.name,
+                            style: const TextStyle(
+                              fontSize: 10,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                )
-                .toList(),
+                  )
+                  .toList(),
+            ),
           ),
         ));
   }
@@ -90,14 +96,17 @@ class _TransactionListViewState extends State<TransactionListView> {
               itemCount: box.values.length,
               itemBuilder: (context, index) => TransactionListElement(
                 transaction: box.getAt(index)!,
+                categoryController: widget.categoryController,
               ),
             ),
           ),
           if (_selectedCategory != null)
             TransactionCreatePage(
-                onBackgroundClick: _leaveCreation,
-                category: _selectedCategory!,
-                onSubmit: _confirmTransactionCallback)
+              onBackgroundClick: _leaveCreation,
+              category: _selectedCategory!,
+              onSubmit: _confirmTransactionCallback,
+              transactionController: widget.transactionController,
+            )
         ],
       ),
       floatingActionButton: Visibility(
@@ -138,8 +147,12 @@ class _TransactionListViewState extends State<TransactionListView> {
 
 class TransactionListElement extends StatelessWidget {
   final Transaction transaction;
-  const TransactionListElement({Key? key, required this.transaction})
-      : super(key: key);
+  final CategoryController categoryController;
+  const TransactionListElement({
+    Key? key,
+    required this.transaction,
+    required this.categoryController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -155,14 +168,15 @@ class TransactionListElement extends StatelessWidget {
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
-                    color: transaction.category?.color,
+                    color: colorsPack.elementAt(categoryController
+                        .getAt(transaction.categoryId!)
+                        .colorId),
                     borderRadius: BorderRadius.circular(50),
                   ),
                   child: Center(
-                      child: Icon(IconData(transaction.category!.iconCodePoint,
-                          fontFamily: transaction.category!.iconFontFamily,
-                          fontPackage:
-                              transaction.category!.iconFontPackage)))),
+                      child: Icon(iconPack.elementAt(categoryController
+                          .getAt(transaction.categoryId!)
+                          .iconId)))),
               Text(
                 transaction.comment,
                 style: const TextStyle(

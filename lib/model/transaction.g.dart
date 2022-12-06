@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../model/transaction.dart';
+part of 'transaction.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -17,12 +17,13 @@ class TransactionAdapter extends TypeAdapter<Transaction> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Transaction(
+      id: fields[0] as int,
       date: fields[1] as DateTime,
       amount: fields[2] as double,
       type: fields[3] as TransactionType,
-      category: fields[5] as Category?,
+      categoryId: fields[5] as int?,
       comment: fields[4] as String,
-    )..id = fields[0] as int;
+    );
   }
 
   @override
@@ -40,7 +41,7 @@ class TransactionAdapter extends TypeAdapter<Transaction> {
       ..writeByte(4)
       ..write(obj.comment)
       ..writeByte(5)
-      ..write(obj.category);
+      ..write(obj.categoryId);
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:expense_tracker/controllers/controller.dart';
 import 'package:expense_tracker/model/category.dart';
 import 'package:expense_tracker/model/transaction.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +9,12 @@ class TransactionCreate extends StatefulWidget {
     super.key,
     required this.category,
     required this.onConfirm,
+    required this.transactionController,
   });
 
   final Category category;
   final void Function(Transaction?) onConfirm;
+  final TransactionController transactionController;
 
   @override
   State<TransactionCreate> createState() => _TransactionCreateState();
@@ -268,10 +271,11 @@ class _TransactionCreateState extends State<TransactionCreate> {
                       Transaction? transaction;
                       if (transactionAmount != 0) {
                         transaction = Transaction(
+                            id: widget.transactionController.getNextId(),
                             date: DateTime.now(),
                             amount: _parseAmount(),
                             type: TransactionType.EXPENSE,
-                            category: widget.category,
+                            categoryId: widget.category.id,
                             comment: _comment);
                       }
                       widget.onConfirm(transaction);
@@ -329,15 +333,18 @@ class Button extends StatelessWidget {
 }
 
 class TransactionCreatePage extends StatelessWidget {
-  const TransactionCreatePage(
-      {super.key,
-      required this.onBackgroundClick,
-      required this.category,
-      required this.onSubmit});
+  const TransactionCreatePage({
+    super.key,
+    required this.onBackgroundClick,
+    required this.category,
+    required this.onSubmit,
+    required this.transactionController,
+  });
 
   final VoidCallback onBackgroundClick;
   final Category category;
   final void Function(Transaction?) onSubmit;
+  final TransactionController transactionController;
 
   @override
   Widget build(BuildContext context) {
@@ -357,7 +364,11 @@ class TransactionCreatePage extends StatelessWidget {
             ),
           ),
         ),
-        TransactionCreate(category: category, onConfirm: onSubmit)
+        TransactionCreate(
+          category: category,
+          onConfirm: onSubmit,
+          transactionController: transactionController,
+        )
       ],
     );
   }

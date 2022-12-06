@@ -1,3 +1,4 @@
+import 'package:expense_tracker/const.dart';
 import 'package:expense_tracker/controllers/controller.dart';
 import 'package:expense_tracker/model/category.dart';
 import 'package:expense_tracker/model/transaction.dart';
@@ -11,17 +12,28 @@ void main() async {
   Hive.registerAdapter(TransactionTypeAdapter());
   Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(ColorAdapter());
-  var transactions = await Hive.openBox<Transaction>('transactions');
+  await Hive.openBox<Transaction>('transactions');
+  await Hive.openBox<Category>('categories');
+  CategoryController categoryController = CategoryController();
   TransactionController transactionController = TransactionController();
+  for (var category in initialCategories) {
+    await categoryController.save(category);
+  }
   runApp(MyApp(
     transactionController: transactionController,
+    categoryController: categoryController,
   ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.transactionController});
+  const MyApp({
+    super.key,
+    required this.transactionController,
+    required this.categoryController,
+  });
 
   final TransactionController transactionController;
+  final CategoryController categoryController;
 
   // This widget is the root of your application.
   @override
@@ -44,6 +56,7 @@ class MyApp extends StatelessWidget {
       home: TransactionListView(
         title: 'Flutter Demo Home Page',
         transactionController: transactionController,
+        categoryController: categoryController,
       ),
     );
   }
