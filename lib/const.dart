@@ -39,3 +39,20 @@ List<Category> initialCategories = [
     iconFontPackage: FontAwesomeIcons.bagShopping.fontPackage,
   ),
 ];
+
+const iconPack = [
+  FontAwesomeIcons.piggyBank,
+  FontAwesomeIcons.dollarSign,
+  FontAwesomeIcons.house,
+  FontAwesomeIcons.creditCard,
+  FontAwesomeIcons.bagShopping,
+];
+
+const colorsPack = [
+  Colors.amber,
+  Colors.blue,
+  Colors.blueAccent,
+  Colors.blueGrey,
+  Colors.cyan,
+  Colors.cyanAccent,
+];
