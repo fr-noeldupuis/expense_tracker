@@ -1,5 +1,6 @@
 import 'package:expense_tracker/const.dart';
 import 'package:expense_tracker/controllers/controller.dart';
+import 'package:expense_tracker/model/account.dart';
 import 'package:expense_tracker/model/category.dart';
 import 'package:expense_tracker/model/transaction.dart';
 import 'package:expense_tracker/views/transaction_list.dart';
@@ -12,6 +13,7 @@ void main() async {
   Hive.registerAdapter(TransactionTypeAdapter());
   Hive.registerAdapter(CategoryAdapter());
   Hive.registerAdapter(ColorAdapter());
+  Hive.registerAdapter(AccountAdapter());
   await Hive.openBox<Transaction>('transactions');
   await Hive.openBox<Category>('categories');
   CategoryController categoryController = CategoryController();
